@@ -1,0 +1,162 @@
+class Veículo: 
+  
+  def __init__(self, nome, consumo,capacidade):
+    self.nome = nome
+  
+    self.consumo = abs(float(consumo))
+   
+    self.tanqueCapacidade = abs(float(capacidade))
+  
+    self.combustível = float(0)
+  
+  def andar(self, distância):
+  
+    combustívelnecessário = distância / self.consumo
+    distânciamáxima = self.combustível * self.consumo
+    return [self.combustível - combustívelnecessário, distânciamáxima]
+   
+  def nivelGasolina(self):
+    return self.combustível    
+  
+  def adicionarGasolina(self, combustível):
+    self.combustível += abs(combustível)
+  
+def menu(L,carro):
+  if carro != None:
+    print('Carro selecionado: %s'%carro.nome)  
+  
+  o = input('Escolha uma opção\n1) Criar um novo veículo\n2) Selecionar um veículo\n3) Dirigir\n4) Abastecer\n5) Mostrar quantidade de gasolina no tanque\n6) Exibir lista de veículos\n7) Excluir o veículo selecionado\n8) Encerrar o programa\n═>')
+  
+  if o in ['1']:
+    a = input('Nome do veículo: ')
+    b = input('Quilometragem por litro: ')
+    c = input('Capacidade do tanque: ')
+    L.append(Veículo(a,b,c))
+    print('')
+    menu(L,carro)
+    return
+  
+  elif o in ['2']:
+    if L == []:
+      print('Não há veículos')
+      print('')
+      menu(L,carro)
+      return
+    
+    
+    t = input('Escolha um veículo: ')
+    for x in L:
+      if t == x.nome:
+          print('')
+          menu(L,x)
+          return
+  
+    print('Este veículo não existe!')
+    print('')
+    menu(L,carro)
+    return
+   
+  
+  elif o in ['3']:
+    if carro == None:
+      print('É necessário selecionar um veículo!')
+      print('')
+      menu(L,carro)
+      return
+    
+    elif carro.combustível == 0:
+        
+      print('Não há combustível no tanque!')
+      print('')
+      menu(L,carro)
+      return
+    
+    else:  
+    
+      km = float(input ('Digite a distância a ser percorrida: '))
+      if carro.andar(km)[0] < 0:
+     
+        print ('Você andou %.2f km. Precisa abastecer %.2f litro(s) de combustível para completar o percurso'%(carro.andar(km)[1],-carro.andar(km)[0]))
+        
+        carro.combustível = 0.0
+        
+      else:
+        carro.combustível = carro.andar(km)[0]
+      
+    print('')
+    menu(L,carro)
+    return
+	
+  elif o in ['4']:
+    if carro == None:
+      print('É necessário selecionar um veículo!')
+      print('')
+      menu(L,carro)
+      return
+    
+    litros = float(input('Digite a quantidade de combustível a ser adicionada: '))
+      
+    if litros + carro.combustível > carro.tanqueCapacidade:
+        
+      print ('O tanque do veículo está cheio ou não suporta esta quantidade de combustível!')
+      
+    else:
+        carro.adicionarGasolina(litros)
+        
+    print('')
+    menu(L,carro)
+    return
+
+  elif o in ['5']:
+    if carro == None:
+      print('É necessário selecionar um veículo!')
+      print('')
+      menu(L,carro)
+      return
+    
+    print ('Nível atual de combustível: ',carro.nivelGasolina())
+    print('')
+    menu(L,carro)
+    return
+
+
+  elif o in ['6']:
+    if L == []:
+      print('Não há veículos!')
+      print('')
+      menu(L,carro)
+      return
+    
+    M = []
+    for i in L:
+      M.append(i.nome)
+    print (M)
+    #print (L)
+    print('')
+    menu(L,carro)
+    return
+
+  elif o in ['7']:
+    if carro == None:
+      print('É necessário selecionar um veículo!')
+      print('')
+      menu(L,carro)
+      return
+    
+    L.remove(carro)
+    print('')
+    menu(L,None)
+    return
+
+  elif o in ['8']:
+    return
+
+  else:
+    print ('opção inválida!')
+    print('')
+    menu(L,carro)
+    return
+
+
+
+menu([], None)
